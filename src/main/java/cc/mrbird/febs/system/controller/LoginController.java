@@ -44,10 +44,10 @@ public class LoginController extends BaseController {
     public FebsResponse login(
             @NotBlank(message = "{required}") String username,
             @NotBlank(message = "{required}") String password,
-            @NotBlank(message = "{required}") String verifyCode,
+//            @NotBlank(message = "{required}") String verifyCode,
             boolean rememberMe, HttpServletRequest request) throws FebsException {
         HttpSession session = request.getSession();
-        validateCodeService.check(session.getId(), verifyCode);
+//        validateCodeService.check(session.getId(), verifyCode);
         password = MD5Util.encrypt(username.toLowerCase(), password);
         UsernamePasswordToken token = new UsernamePasswordToken(username, password, rememberMe);
         super.login(token);
