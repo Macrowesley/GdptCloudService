@@ -7,7 +7,7 @@ public interface UserSpecialConstant {
     /**
      * 系统管理员
      */
-    long rootAdmin = 8;
+    long rootAdmin = 1;
     /**
      * 俄罗斯管理员
      */
