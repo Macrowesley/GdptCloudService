@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gdpt.cloudService.mapper.RobotUpdateMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cc.mrbird.febs.cloud.entity.RobotUpdate">
+        <id column="robot_record_id" property="robotRecordId" />
+        <result column="robot_id" property="robotId" />
+        <result column="status" property="status" />
+        <result column="remark" property="remark" />
+        <result column="update_date" property="updateDate" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        robot_record_id, robot_id, status, remark, update_date
+    </sql>
+
+</mapper>
