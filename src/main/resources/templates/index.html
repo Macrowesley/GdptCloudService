@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="utf-8">
+    <title th:text="#{server.name}"></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" th:href="@{layui/css/layui.css}" media="all">
+    <link rel="stylesheet" th:href="@{febs/css/febs.css}" media="all">
+    <link rel="stylesheet" th:href="@{febs/css/eleTree.css}" media="all">
+    <link rel="stylesheet" th:href="@{febs/css/apexcharts.min.css}" media="all">
+    <link rel="stylesheet" th:href="@{febs/css/formSelects-v4.css}" media="all">
+
+    <!-- 高德地图，key为演示作用，请勿滥用-->
+    <script src="https://webapi.amap.com/maps?v=1.4.15&key=0e8a587317998a5e03cf608649b229d6&plugin=AMap.Autocomplete"></script>
+    <link rel="icon" th:href="@{febs/images/favicon.ico}" type="image/x-icon"/>
+</head>
+<body>
+<div id="febs"></div>
+<script th:src="@{layui/layui.js}"></script>
+<script th:src="@{websocket/websocket.js}"></script>
+<script th:src="@{jsencrypt/jsencrypt.min.js}"></script>
+<script th:src="@{i18n/jquery-3.5.1.min.js}"></script>
+<script th:src="@{common/md5.min.js}"></script>
+<script th:src="@{common/common.js}"></script>
+<!--<script th:src="@{i18n/jquery.i18n.properties-min-1.0.9.js}"></script>-->
+<script th:src="@{i18n/jquery.i18n.properties-1.2.7.js}"></script>
+<script th:inline="javascript" type="text/javascript">
+    var ctx = [[@{/}]];
+    //获取默认语言
+    var LANG_COUNTRY = [[${#locale.language+'_'+#locale.country}]];
+    var currentUser = [[${user}]];
+    currentUser.roleSet = [[${roles}]];
+    currentUser.permissionSet = [[${permissions}]];
+    var hasNewNotice = [[${hasNewNotice}]];
+    var websocketServiceName = [[${websocketServiceName}]];
+
+    layui.config({
+        base: './febs/',
+        debug: true
+    }).extend({
+        formSelects: 'lay/extends/formSelects-v4.min',
+        treeSelect: 'lay/extends/treeSelect',
+        apexcharts: 'lay/extends/apexcharts.min',
+        eleTree: 'lay/extends/eleTree'
+    }).use(['index','jquery']);
+
+    // echo("11")
+    initLaunage();
+    // echo("222")
+    //开启websocket
+    openSocket(currentUser.userId, websocketServiceName)
+
+
+    // test1();
+    /*function test1() {
+        echo("开始测试RSA加密解密")
+        var jsonObj = {name:"好看",sex:"男"};
+
+        $.ajax({
+            type: "POST",   //提交的方法
+            dataType: "json",
+            contentType : 'application/json',//添加这句话
+            url:ctx + 'test/rsaTest?className=一班&teacher=王老师', //提交的地址
+            async: false,
+            data:myEncrypt(jsonObj),
+
+            error: function(request) {  //失败的话
+                echoObject(request)
+            },
+            success: function(data) {  //成功
+                echoObject(data)
+            }
+        });
+
+        echo("测试2")
+        $.ajax({
+            type: "POST",   //提交的方法
+            dataType: "json",
+            contentType : 'application/json',//添加这句话
+            url:ctx + 'test/rsaTest2', //提交的地址
+            async: false,
+            data:JSON.stringify(jsonObj),
+
+            error: function(request) {  //失败的话
+                echoObject(request)
+            },
+            success: function(data) {  //成功
+                echoObject(data)
+            }
+        });
+
+    }
+
+    // test2();
+    function test2() {
+        echo("开始测试sign测试")
+        var jsonObj = {name:"好看",sex:"男"};
+        $.ajax({
+            type: "POST",   //提交的方法
+            dataType: "json",
+            contentType : 'application/json',//添加这句话
+            headers: {
+                'SignsValue': "sign111",
+                'TimeStamp': "time111",
+            },
+            url:ctx + 'myTest/signTest1?className=1班&teacher=王老师', //提交的地址
+            async: false,
+            data:JSON.stringify(jsonObj),
+
+
+            error: function(request) {  //失败的话
+                echoObject(request)
+            },
+            success: function(data) {  //成功
+                echoObject(data)
+            }
+        });
+
+        echo("测试2")
+        $.ajax({
+            type: "GET",   //提交的方法
+            dataType: "json",
+            contentType : 'application/json',//添加这句话
+            headers: {
+                'SignsValue': "sign222",
+                'TimeStamp': "time222",
+            },
+            url:ctx + 'myTest/signTest2/王老师/2班', //提交的地址 https://auto.uprins.com/p/test/signTest2/王老师/2班
+            async: false,
+
+            error: function(request) {  //失败的话
+                echoObject(request)
+            },
+            success: function(data) {  //成功
+                echoObject(data)
+            }
+        });
+
+
+    }
+
+    // test3();
+    function test3() {
+        console.time("总时间");
+
+        console.time("时间2");
+        console.time("时间1");
+
+        echo("开始签名")
+
+        var params = {name:"好看",sex:"男"};
+        var sign = "";
+        var nonce = "";
+        echo(createSign(params))
+
+        echo("获取时间戳")
+        console.timeEnd("时间1")
+        $.ajax({
+            type: "GET",   //提交的方法
+            url:ctx + 'common/getTime/',
+            error: function(request) {  //失败的话
+                echoObject(request)
+            },
+            success: function(data) {  //成功
+                echoObject(data)
+                nonce = data.data
+                params.nonce = nonce;
+                echo("打印签名")
+
+                sign = createSign(params)
+                echo(sign)
+                console.timeEnd("时间2")
+
+                echo("开始发送数据")
+                $.ajax({
+                    type: "POST",   //提交的方法
+                    dataType: "json",
+                    contentType : 'application/json',//添加这句话
+                    headers: {
+                        'nonce': nonce,
+                        'sign': sign,
+                    },
+                    url:ctx + 'myTest/signTest3', //提交的地址
+                    async: false,
+                    data:JSON.stringify(params),
+                    error: function(request) {  //失败的话
+                        echoObject(request)
+                    },
+                    success: function(data) {  //成功
+                        echoObject(data)
+                        console.timeEnd("总时间");
+                    }
+                });
+
+            }
+        });
+
+        echo("测试2")
+        $.ajax({
+            type: "GET",   //提交的方法
+            dataType: "json",
+            contentType : 'application/json',//添加这句话
+            headers: {
+                'sign': "sign222",
+                'nonce': "time222",
+            },
+            url:ctx + 'myTest/signTest2/王老师/2班', //提交的地址 https://auto.uprins.com/p/test/signTest2/王老师/2班
+            async: false,
+
+            error: function(request) {  //失败的话
+                echoObject(request)
+            },
+            success: function(data) {  //成功
+                echoObject(data)
+            }
+        });
+
+        var jsonObj = {name:"好看1",sex:"男1"};
+        $.ajax({
+            type: "POST",   //提交的方法
+            dataType: "json",
+            contentType : 'application/json',//添加这句话
+            headers: {
+                'sign': "sign111",
+                'nonce': "time111",
+            },
+            url:ctx + 'myTest/signTest1?className=1班&teacher=王老师', //提交的地址
+            async: false,
+            data:JSON.stringify(jsonObj),
+
+
+            error: function(request) {  //失败的话
+                echoObject(request)
+            },
+            success: function(data) {  //成功
+                echoObject(data)
+            }
+        });
+
+    }
+*/
+
+</script>
+</body>
+</html>

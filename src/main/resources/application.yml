@@ -1,0 +1,60 @@
+server:
+  port: 81
+  tomcat:
+    uri-encoding: utf-8
+    max-threads: 200
+    max-connections: 5000
+    accept-count: 1000
+
+#  undertow:
+#    direct-buffers: true
+#    io-threads: 4
+#    worker-threads: 160
+  servlet:
+    context-path: /GdptCloudPlatform
+
+spring:
+  profiles:
+    active: dev
+
+  thymeleaf:
+    cache: false
+
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+
+  aop:
+    proxy-target-class: true
+
+  devtools:
+    restart:
+      enabled: true  #设置开启热部署
+
+  # 配置国际化文件路径
+  messages:
+    basename: static/i18n/message
+
+  cache:
+    redis:
+      # 过期时间
+      time-to-live: 1d
+      # 写入redis时是否使用键前缀。
+      use-key-prefix: true
+    cache-names: pos
+
+jasypt:
+  encryptor:
+    password: ADCBiQKBgQDBwlcnX0dBhYcjua
+
+mybatis-plus:
+  # 别名 利用包扫描来做，批量定义默认的类的别名，是类名首字母小写
+  type-aliases-package: cc.mrbird.febs.*.entity
+  #mapper-locations: classpath*:mapper/**/*.xml,classpath*:mapper/rcs/**/*.xml
+  mapper-locations: classpath*:mapper/*/*.xml
+  configuration:
+    jdbc-type-for-null: null
+  global-config:
+    banner: false
+    db-config:
+      select-strategy: not_empty
