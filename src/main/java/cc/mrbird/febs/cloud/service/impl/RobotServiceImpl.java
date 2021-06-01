@@ -72,7 +72,6 @@ public class RobotServiceImpl extends ServiceImpl<RobotMapper, Robot> implements
         Date date = new Date();
         param.setRegisterDate(date);
         log.info(param.toString());
-        this.baseMapper.insert(param);
         if (this.baseMapper.insert(param) != 1){
             throw new FebsException("机器人" + param.getName() + "注册失败1");
         }
