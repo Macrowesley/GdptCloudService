@@ -25,6 +25,8 @@ public class ViewController {
         return FebsUtil.view("cloud/job/job");
     }
 
+
+
     @GetMapping("robot/robot")
     @RequiresPermissions("robot:view")
     public String robot() {

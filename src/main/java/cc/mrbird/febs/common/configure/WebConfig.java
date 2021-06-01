@@ -20,7 +20,7 @@ public class WebConfig {
      * 解决：传入的是string类型的日期，但是bean里面的是Date类型，的类型转换问题
      * @return
      */
-    @Bean
+   /* @Bean
     public MappingJackson2HttpMessageConverter getMappingJackson2HttpMessageConverter() {
         MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter = new MappingJackson2HttpMessageConverter();
         //设置日期格式
@@ -55,5 +55,5 @@ public class WebConfig {
 
         // 6.返回HttpMessageConverters对象
         return new HttpMessageConverters(converter);
-    }
+    }*/
 }

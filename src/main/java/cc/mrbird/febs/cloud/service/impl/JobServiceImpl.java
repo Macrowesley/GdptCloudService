@@ -5,13 +5,16 @@ import cc.mrbird.febs.cloud.entity.JobUpdate;
 import cc.mrbird.febs.cloud.mapper.JobMapper;
 import cc.mrbird.febs.cloud.service.IJobService;
 import cc.mrbird.febs.cloud.service.IJobUpdateService;
+import cc.mrbird.febs.common.entity.FebsConstant;
 import cc.mrbird.febs.common.entity.QueryRequest;
 import cc.mrbird.febs.common.exception.FebsException;
+import cc.mrbird.febs.common.utils.SortUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -159,5 +162,30 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements IJobS
         if (this.count(lambdaQueryWrapper) != 1) {
             throw new FebsException("编号为：" + jobId + "的作业对象不存在");
         }
+    }
+
+    /**
+     * 获取job列表
+     * @param job
+     * @param request
+     * @return
+     */
+    @Override
+    public IPage<Job> findJobDetailList(Job job, QueryRequest request) {
+        if (job == null) {
+            job = new Job();
+        }
+
+        log.info(job.toString());
+        LambdaQueryWrapper<Job> queryWrapper = new LambdaQueryWrapper<>();
+
+        if (StringUtils.isNotBlank(job.getName())) {
+            queryWrapper.eq(Job::getName, job.getName());
+        }
+
+        Page<Job> page = new Page<>();
+        SortUtil.handlePageSort(request, page, "job_id", FebsConstant.ORDER_DESC, false);
+
+        return this.page(page,queryWrapper);
     }
 }

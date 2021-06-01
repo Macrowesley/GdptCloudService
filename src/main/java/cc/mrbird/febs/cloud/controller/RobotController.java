@@ -6,6 +6,7 @@ import cc.mrbird.febs.cloud.entity.MyId;
 import cc.mrbird.febs.cloud.entity.Robot;
 import cc.mrbird.febs.cloud.entity.RobotUpdate;
 import cc.mrbird.febs.cloud.service.IRobotService;
+import cc.mrbird.febs.common.controller.BaseController;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;

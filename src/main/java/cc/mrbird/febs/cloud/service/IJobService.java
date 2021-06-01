@@ -65,4 +65,6 @@ public interface IJobService extends IService<Job> {
      * @param jobId
      */
     void checkIsExistById(int jobId);
+
+    IPage<Job> findJobDetailList(Job job, QueryRequest request);
 }
