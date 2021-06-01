@@ -66,4 +66,6 @@ public interface IRobotService extends IService<Robot> {
     void checkIsExistByIds(int[] arr);
 
     public void checkIsExistById(int robotId);
+
+    IPage<Robot> findRobotDetailList(Robot robot, QueryRequest request);
 }

@@ -5,13 +5,16 @@ import cc.mrbird.febs.cloud.entity.RobotUpdate;
 import cc.mrbird.febs.cloud.mapper.RobotMapper;
 import cc.mrbird.febs.cloud.service.IRobotService;
 import cc.mrbird.febs.cloud.service.IRobotUpdateService;
+import cc.mrbird.febs.common.entity.FebsConstant;
 import cc.mrbird.febs.common.entity.QueryRequest;
 import cc.mrbird.febs.common.exception.FebsException;
+import cc.mrbird.febs.common.utils.SortUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -160,4 +163,23 @@ public class RobotServiceImpl extends ServiceImpl<RobotMapper, Robot> implements
         }
     }
 
+    @Override
+    public IPage<Robot> findRobotDetailList(Robot bean, QueryRequest request) {
+        if (bean == null) {
+            bean = new Robot();
+        }
+
+        log.info(bean.toString());
+        LambdaQueryWrapper<Robot> queryWrapper = new LambdaQueryWrapper<>();
+
+        if (StringUtils.isNotBlank(bean.getName())) {
+            queryWrapper.eq(Robot::getName, bean.getName());
+        }
+
+        Page<Robot> page = new Page<>();
+        SortUtil.handlePageSort(request, page, "robot_id", FebsConstant.ORDER_DESC, false);
+
+        return this.page(page,queryWrapper);
+
+    }
 }

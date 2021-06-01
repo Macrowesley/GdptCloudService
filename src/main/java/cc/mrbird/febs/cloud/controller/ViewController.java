@@ -41,10 +41,21 @@ public class ViewController {
         return FebsUtil.view("cloud/robot/robot");
     }
 
+    @GetMapping("robot/detail/{robotId}")
+    public String robotDetail(@PathVariable String robotId) {
+        log.info("得到的robotId={}",robotId);
+        return FebsUtil.view("cloud/robot/detail");
+    }
+
     @GetMapping("task/task")
     @RequiresPermissions("task:view")
     public String task() {
         return FebsUtil.view("cloud/task/task");
     }
 
+    @GetMapping("task/detail/{taskId}")
+    public String taskDetail(@PathVariable String taskId) {
+        log.info("得到的 taskId={}",taskId);
+        return FebsUtil.view("cloud/task/detail");
+    }
 }

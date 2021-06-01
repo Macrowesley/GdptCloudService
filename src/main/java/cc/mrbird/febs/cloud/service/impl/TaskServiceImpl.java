@@ -1,5 +1,6 @@
 package cc.mrbird.febs.cloud.service.impl;
 
+import cc.mrbird.febs.cloud.entity.Robot;
 import cc.mrbird.febs.cloud.entity.Task;
 import cc.mrbird.febs.cloud.entity.TaskUpdate;
 import cc.mrbird.febs.cloud.mapper.TaskMapper;
@@ -7,12 +8,16 @@ import cc.mrbird.febs.cloud.service.IJobService;
 import cc.mrbird.febs.cloud.service.IRobotService;
 import cc.mrbird.febs.cloud.service.ITaskService;
 import cc.mrbird.febs.cloud.service.ITaskUpdateService;
+import cc.mrbird.febs.common.entity.FebsConstant;
 import cc.mrbird.febs.common.entity.QueryRequest;
 import cc.mrbird.febs.common.exception.FebsException;
+import cc.mrbird.febs.common.utils.SortUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -28,6 +33,7 @@ import java.util.List;
  * @author lai
  * @since 2020-09-15
  */
+@Slf4j
 @Service
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements ITaskService {
@@ -99,7 +105,6 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements IT
         if (this.baseMapper.insert(task) != 1) {
             throw new FebsException("任务" + task.getName() + "添加失败");
         }
-        this.baseMapper.insert(task);
         return task.getTaskId();
     }
 
@@ -179,8 +184,24 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements IT
         } catch (Exception e) {
             throw new FebsException("编号为：" + taskId + "的任务不存在");
         }
-
-
     }
 
+    @Override
+    public IPage<Task> findTaskDetailList(Task bean, QueryRequest request) {
+        if (bean == null) {
+            bean = new Task();
+        }
+
+        log.info(bean.toString());
+        LambdaQueryWrapper<Task> queryWrapper = new LambdaQueryWrapper<>();
+
+        if (StringUtils.isNotBlank(bean.getName())) {
+            queryWrapper.eq(Task::getName, bean.getName());
+        }
+
+        Page<Task> page = new Page<>();
+        SortUtil.handlePageSort(request, page, "task_id", FebsConstant.ORDER_DESC, false);
+
+        return this.page(page,queryWrapper);
+    }
 }

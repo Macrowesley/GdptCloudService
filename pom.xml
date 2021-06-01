@@ -6,7 +6,7 @@
     <artifactId>GdptCloudService</artifactId>
     <version>1.0</version>
     <name>febs</name>
-    <description>注资管理服务器</description>
+    <description>工大云平台</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>

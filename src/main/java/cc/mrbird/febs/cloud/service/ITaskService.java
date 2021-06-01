@@ -61,4 +61,6 @@ public interface ITaskService extends IService<Task> {
     void checkIsExistById(int taskId);
 
     void checkCanModify(TaskUpdate taskUpdate);
+
+    IPage<Task> findTaskDetailList(Task task, QueryRequest request);
 }
