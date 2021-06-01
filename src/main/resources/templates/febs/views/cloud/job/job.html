@@ -8,7 +8,7 @@
                             <div class="layui-col-md10">
                                 <div class="layui-form-item">
                                     <div class="layui-inline">
-                                        <label class="layui-form-label layui-form-label-sm" th:text="#{job.name}"></label>
+                                        <label class="layui-form-label layui-form-label" th:text="#{job.name}"></label>
                                         <div class="layui-input-inline">
                                             <input type="text" name="name" autocomplete="off" class="layui-input">
                                         </div>
@@ -66,7 +66,7 @@
     {{#
     var status = {
     1: {title: i18n("job.statusNormal"), color: 'green'},
-    2: {title: i18n("job.statusFix"), color: 'volcano'},
+    2: {title: i18n("job.statusFix"), color: 'orange'},
     3: {title: i18n("job.statusWarning"), color: 'red'}
     }[d.status];
     }}
@@ -78,8 +78,8 @@
     <span shiro:lacksPermission="job:update">
         <span class="layui-badge-dot febs-bg-orange"></span> <span th:text="#{noPermission}"></span>
     </span>
-    <!--<a lay-event="detail"><i class="layui-icon febs-edit-area febs-green">&#xe7a5;</i></a>-->
-    <a lay-event="edit" shiro:hasPermission="job:update"><i class="layui-icon febs-edit-area febs-blue">&#xe642;</i></a>
+    <a lay-event="detail"><i class="layui-icon febs-edit-area febs-green">&#xe7a5;</i></a>
+    <!--<a lay-event="edit" shiro:hasPermission="job:update"><i class="layui-icon febs-edit-area febs-blue">&#xe642;</i></a>-->
 
     <!--  <a lay-event="del" shiro:hasPermission="job:delete"><i
             class="layui-icon febs-edit-area febs-red">&#xe7f9;</i></a>-->
@@ -223,7 +223,7 @@
                     {field: 'repairSchedule', title: i18n("job.repairSchedule")},
                     {field: 'registerDate', title: i18n("registerDate"), minWidth: 180, sort: false},
                     {field: 'updateDate', title: i18n("updateDate"), minWidth: 180, sort: false},
-                    /*{title: i18n("operation"), toolbar: '#job-option', minWidth: 140}*/
+                    {title: i18n("operation"), toolbar: '#job-option', minWidth: 140}
                 ]]
             });
         }
@@ -242,12 +242,12 @@
                     });
                 }*/
 
-               /* if (layEvent === 'detail') {
+                if (layEvent === 'detail') {
                     febs.modal.view('详情', 'job/detail/' + data.jobId, {
                         area: $(window).width() <= 750 ? '95%' : '660px'
                     });
-                }*/
-                if (layEvent === 'edit') {
+                }
+                /*if (layEvent === 'edit') {
                     febs.modal.open(i18n("job.editjob"), 'job/update/' + data.jobId, {
                         area: $(window).width() <= 750 ?  ['90%', '90%'] : ['60%', '90%'],
                         offset: '30px',
@@ -259,7 +259,7 @@
                             layer.closeAll();
                         }
                     });
-                }
+                }*/
             });
 
             table.on('sort(jobTable)', function (obj) {

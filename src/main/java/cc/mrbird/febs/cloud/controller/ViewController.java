@@ -2,14 +2,16 @@ package cc.mrbird.febs.cloud.controller;
 
 import cc.mrbird.febs.common.entity.FebsConstant;
 import cc.mrbird.febs.common.utils.FebsUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import springfox.documentation.annotations.ApiIgnore;
 
-
-@Controller("cloud")
+@Slf4j
+@Controller("cloudView")
 @RequestMapping(FebsConstant.VIEW_PREFIX)
 @ApiIgnore
 public class ViewController {
@@ -23,6 +25,12 @@ public class ViewController {
     @RequiresPermissions("job:view")
     public String job() {
         return FebsUtil.view("cloud/job/job");
+    }
+
+    @GetMapping("job/detail/{jobId}")
+    public String jobDetail(@PathVariable String jobId) {
+        log.info("得到的jobId={}",jobId);
+        return FebsUtil.view("cloud/job/detail");
     }
 
 

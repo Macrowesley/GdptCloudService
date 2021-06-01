@@ -1,10 +1,9 @@
-package cc.mrbird.febs.cloud.entity;
+package cc.mrbird.febs.cloud.dto;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
@@ -30,18 +29,11 @@ import java.util.Date;
 @AllArgsConstructor
 @ToString
 @EqualsAndHashCode(callSuper = false)
-@TableName("c_task")
 @ApiModel
-public class Task implements Serializable {
+public class TaskDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    /**
-     * 任务编号id
-     */
-    @ApiModelProperty(hidden = true)
-    @TableId(value = "task_id", type = IdType.AUTO)
-    private Integer taskId;
 
     /**
      * 任务名称
@@ -91,7 +83,6 @@ public class Task implements Serializable {
      */
     @ApiModelProperty(name = "robotIds", value = "关联的多个机器人编号id（多个id用英文逗号,隔开）", required = true, dataType = "String")
     @Length(min = 1,max = 200)
-    @TableField("robot_ids")
     private String robotIds;
 
     /**
@@ -99,30 +90,14 @@ public class Task implements Serializable {
      */
     @ApiModelProperty(name = "beginDate", value = "任务开始时间 xxxx-xx-xx", required = true, dataType = "String")
     @NotNull
-    @TableField("begin_date")
-    private Date beginDate;
+    private String beginDate;
 
     /**
      * 任务预计完成时间
      */
     @ApiModelProperty(name = "expectedFinishDate", value = "任务预计完成时间 xxxx-xx-xx", required = true, dataType = "String")
     @NotNull
-    @TableField("expected_finish_date")
-    private Date expectedFinishDate;
-
-    /**
-     * 注册时间
-     */
-    @ApiModelProperty(hidden = true)
-    @TableField("register_date")
-    private Date registerDate;
-
-    /**
-     * 更新时间
-     */
-    @ApiModelProperty(hidden = true)
-    @TableField("update_date")
-    private Date updateDate;
+    private String expectedFinishDate;
 
 
 }

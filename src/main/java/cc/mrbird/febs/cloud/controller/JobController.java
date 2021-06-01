@@ -1,5 +1,7 @@
 package cc.mrbird.febs.cloud.controller;
 
+import cc.mrbird.febs.cloud.dto.JobDTO;
+import cc.mrbird.febs.cloud.dto.JobUpdateDTO;
 import cc.mrbird.febs.cloud.entity.GdptJSONResult;
 import cc.mrbird.febs.cloud.entity.Job;
 import cc.mrbird.febs.cloud.entity.JobUpdate;
@@ -16,6 +18,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -55,7 +58,9 @@ public class JobController extends BaseController {
 
     @ApiOperation(value = "注册作业对象")
     @PostMapping("/register")
-    public GdptJSONResult register(@RequestBody @Validated Job job) {
+    public GdptJSONResult register(@RequestBody @Validated JobDTO jobDTO) {
+        Job job = new Job();
+        BeanUtils.copyProperties(jobDTO, job);
         return GdptJSONResult.ok(MyId.create(jobService.add(job)));
     }
 
@@ -63,9 +68,11 @@ public class JobController extends BaseController {
     @ApiOperation(value = "更新作业对象状态")
     @PostMapping("/update")
     @PutMapping
-    public GdptJSONResult update(@RequestBody @Validated JobUpdate jobUpdate) {
-        jobService.modify(jobUpdate);
-        return GdptJSONResult.ok(MyId.create(jobUpdate.getJobId()));
+    public GdptJSONResult update(@RequestBody @Validated JobUpdateDTO jobUpdateDTO) {
+        JobUpdate bean = new JobUpdate();
+        BeanUtils.copyProperties(jobUpdateDTO, bean);
+        jobService.modify(bean);
+        return GdptJSONResult.ok(MyId.create(bean.getJobId()));
     }
 
 }

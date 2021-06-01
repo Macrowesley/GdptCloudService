@@ -26,6 +26,8 @@ public class DateUtil {
 
     public static final String FULL_TIME_SPLIT_PATTERN = "yyyy-MM-dd HH:mm:ss";
 
+    public static final String sample_TIME_SPLIT_PATTERN = "yyyy-MM-dd";
+
     public static final String CST_TIME_PATTERN = "EEE MMM dd HH:mm:ss zzz yyyy";
 
     public static String formatFullTime(LocalDateTime localDateTime) {
@@ -56,9 +58,24 @@ public class DateUtil {
         return localDateTime.format(DateTimeFormatter.ofPattern(format));
     }
 
-    public static Date getDateFormat(String date) throws ParseException {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(FULL_TIME_SPLIT_PATTERN, Locale.CHINA);
-        return simpleDateFormat.parse(date);
+    public static Date getDateFormat(String date)  {
+        try {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(FULL_TIME_SPLIT_PATTERN, Locale.CHINA);
+            return simpleDateFormat.parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static Date getSimpleDateFormat(String date)  {
+        try {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(sample_TIME_SPLIT_PATTERN, Locale.CHINA);
+            return simpleDateFormat.parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     /**
